@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" font-family="Segoe UI, Arial, Helvetica, sans-serif">
+  <title>Study Sprint: how the agents work together</title>
+  <desc>Lesson build pipeline (topic gate, five agents, review loop) feeding the learner's study session (read, movement breaks, quiz, results).</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#14213d"/></marker>
+    <marker id="o" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  </defs>
+  <rect width="1200" height="760" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="26" font-weight="700" fill="#14213d">Study Sprint: how the agents work together</text>
+  <text x="40" y="70" font-size="15" fill="#4a5568">Agents write. Code gates, measures, sanitizes, shuffles, times and grades.</text>
+
+  <!-- Legend -->
+  <rect x="820" y="30" width="22" height="16" rx="4" fill="#e9f2fd" stroke="#2a78d6"/><text x="850" y="43" font-size="13" fill="#14213d">Claude agent</text>
+  <rect x="950" y="30" width="22" height="16" rx="4" fill="#fff4d6" stroke="#b7791f"/><text x="980" y="43" font-size="13" fill="#14213d">Code (deterministic)</text>
+  <rect x="820" y="54" width="22" height="16" rx="4" fill="#e6f7ef" stroke="#1baf7a"/><text x="850" y="67" font-size="13" fill="#14213d">Learner / web app</text>
+
+  <!-- ===== Panel 1: building a lesson ===== -->
+  <rect x="24" y="92" width="1152" height="330" rx="16" fill="#f8fafc" stroke="#d6dde8"/>
+  <text x="44" y="122" font-size="17" font-weight="700" fill="#1d5aa6">1. Building a lesson (harness.py, about a minute, about $0.20)</text>
+
+  <!-- Learner input -->
+  <rect x="44" y="190" width="130" height="86" rx="12" fill="#e6f7ef" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="109" y="222" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Learner</text>
+  <text x="109" y="243" font-size="12.5" text-anchor="middle" fill="#4a5568">subject + grade</text>
+  <text x="109" y="261" font-size="12.5" text-anchor="middle" fill="#4a5568">(K to College)</text>
+
+  <!-- Topic gate -->
+  <rect x="206" y="190" width="140" height="86" rx="12" fill="#fff4d6" stroke="#b7791f" stroke-width="1.5"/>
+  <text x="276" y="218" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Topic gate</text>
+  <text x="276" y="238" font-size="12.5" text-anchor="middle" fill="#4a5568">input checks,</text>
+  <text x="276" y="254" font-size="12.5" text-anchor="middle" fill="#4a5568">blocklist, age gates</text>
+  <text x="276" y="270" font-size="12.5" text-anchor="middle" fill="#4a5568">(no agent, no cost)</text>
+
+  <!-- Intake -->
+  <rect x="378" y="190" width="140" height="86" rx="12" fill="#e9f2fd" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="448" y="218" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Intake Agent</text>
+  <text x="448" y="238" font-size="12.5" text-anchor="middle" fill="#4a5568">set_topic or decline</text>
+  <text x="448" y="254" font-size="12.5" text-anchor="middle" fill="#4a5568">gate re-checked on</text>
+  <text x="448" y="270" font-size="12.5" text-anchor="middle" fill="#4a5568">its own wording</text>
+
+  <!-- Curriculum -->
+  <rect x="550" y="190" width="150" height="86" rx="12" fill="#e9f2fd" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="625" y="218" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Curriculum Agent</text>
+  <text x="625" y="238" font-size="12.5" text-anchor="middle" fill="#4a5568">3 concepts</text>
+  <text x="625" y="254" font-size="12.5" text-anchor="middle" fill="#4a5568">reading level measured</text>
+  <text x="625" y="270" font-size="12.5" text-anchor="middle" fill="#4a5568">by code (Flesch-Kincaid)</text>
+
+  <!-- Diagram (top) and Quiz (bottom), in parallel -->
+  <rect x="742" y="140" width="150" height="80" rx="12" fill="#e9f2fd" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="817" y="167" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Diagram Agent</text>
+  <text x="817" y="187" font-size="12.5" text-anchor="middle" fill="#4a5568">labeled SVG; code</text>
+  <text x="817" y="203" font-size="12.5" text-anchor="middle" fill="#4a5568">sanitizes (allowlist)</text>
+  <rect x="742" y="248" width="150" height="80" rx="12" fill="#e9f2fd" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="817" y="275" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Quiz Agent</text>
+  <text x="817" y="295" font-size="12.5" text-anchor="middle" fill="#4a5568">5 questions; code</text>
+  <text x="817" y="311" font-size="12.5" text-anchor="middle" fill="#4a5568">shuffles the answers</text>
+  <text x="817" y="236" font-size="12" font-style="italic" text-anchor="middle" fill="#4a5568">in parallel</text>
+
+  <!-- Reviewer -->
+  <rect x="934" y="190" width="150" height="86" rx="12" fill="#e9f2fd" stroke="#2a78d6" stroke-width="1.5"/>
+  <text x="1009" y="218" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Reviewer Agent</text>
+  <text x="1009" y="238" font-size="12.5" text-anchor="middle" fill="#4a5568">sees the answer key;</text>
+  <text x="1009" y="254" font-size="12.5" text-anchor="middle" fill="#4a5568">checks facts and</text>
+  <text x="1009" y="270" font-size="12.5" text-anchor="middle" fill="#4a5568">grade fit</text>
+
+  <!-- Arrows, panel 1 -->
+  <line x1="174" y1="233" x2="204" y2="233" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="346" y1="233" x2="376" y2="233" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="518" y1="233" x2="548" y2="233" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="700" y1="222" x2="740" y2="185" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="700" y1="244" x2="740" y2="285" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="892" y1="185" x2="932" y2="222" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="892" y1="285" x2="932" y2="244" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Decline path -->
+  <line x1="276" y1="276" x2="276" y2="346" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#o)"/>
+  <line x1="448" y1="276" x2="448" y2="346" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#o)"/>
+  <rect x="206" y="350" width="312" height="44" rx="10" fill="#fff1ea" stroke="#c2410c"/>
+  <text x="362" y="370" font-size="13.5" font-weight="700" text-anchor="middle" fill="#9a3412">Kind decline shown to the learner</text>
+  <text x="362" y="386" font-size="12" text-anchor="middle" fill="#9a3412">(blocked, age-gated or not a subject)</text>
+
+  <!-- Revision loop -->
+  <path d="M 1009 190 C 1009 95, 640 95, 630 186" fill="none" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#o)"/>
+  <text x="820" y="108" font-size="12.5" font-weight="700" text-anchor="middle" fill="#9a3412">request_revision (up to 2x): concepts → redo diagram + quiz too</text>
+
+  <!-- Publish -->
+  <line x1="1009" y1="276" x2="1009" y2="346" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="890" y="350" width="270" height="56" rx="10" fill="#fff4d6" stroke="#b7791f"/>
+  <text x="1025" y="372" font-size="13.5" font-weight="700" text-anchor="middle" fill="#14213d">approve → assemble lesson.json</text>
+  <text x="1025" y="390" font-size="12" text-anchor="middle" fill="#4a5568">trace, cost and manifest in runs/&lt;id&gt;/</text>
+  <text x="560" y="372" font-size="12.5" fill="#4a5568">Every hand-off is re-validated by code.</text>
+  <text x="560" y="390" font-size="12.5" fill="#4a5568">Turn limits and a token budget per lesson.</text>
+
+
+  <!-- ===== Panel 2: the study session ===== -->
+  <rect x="24" y="438" width="1152" height="300" rx="16" fill="#f8fafc" stroke="#d6dde8"/>
+  <text x="44" y="468" font-size="17" font-weight="700" fill="#1d5aa6">2. The study session (api.py + sessions.py + app.js, all code)</text>
+
+  <!-- connector between panels (drawn after panel 2's background so it stays visible) -->
+  <line x1="1025" y1="406" x2="1025" y2="472" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <text x="1015" y="434" font-size="12.5" text-anchor="end" fill="#4a5568">lesson sent to the browser without the answer key</text>
+  <rect x="890" y="474" width="270" height="70" rx="12" fill="#e6f7ef" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="1025" y="502" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Read: 3 concepts + diagram</text>
+  <text x="1025" y="522" font-size="12.5" text-anchor="middle" fill="#4a5568">60-second timer starts</text>
+
+  <rect x="560" y="474" width="270" height="70" rx="12" fill="#e6f7ef" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="695" y="502" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Quiz: 5 questions</text>
+  <text x="695" y="522" font-size="12.5" text-anchor="middle" fill="#4a5568">after "Finished Reading"; timer restarts</text>
+
+  <rect x="230" y="474" width="270" height="70" rx="12" fill="#e6f7ef" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="365" y="502" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Results</text>
+  <text x="365" y="522" font-size="12.5" text-anchor="middle" fill="#4a5568">score, %, "Great work!", exercises done</text>
+
+  <rect x="44" y="474" width="150" height="70" rx="12" fill="#e6f7ef" stroke="#1baf7a" stroke-width="1.5"/>
+  <text x="119" y="502" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Start Over</text>
+  <text x="119" y="522" font-size="12.5" text-anchor="middle" fill="#4a5568">back to step 1</text>
+
+  <line x1="888" y1="509" x2="832" y2="509" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="558" y1="509" x2="502" y2="509" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="228" y1="509" x2="196" y2="509" stroke="#14213d" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- Break loop -->
+  <rect x="560" y="600" width="600" height="104" rx="12" fill="#fff4d6" stroke="#b7791f" stroke-width="1.5"/>
+  <text x="860" y="628" font-size="15" font-weight="700" text-anchor="middle" fill="#14213d">Movement break when the timer hits 0:00 (reading or quiz)</text>
+  <text x="860" y="650" font-size="13" text-anchor="middle" fill="#4a5568">server picks at random: 10 jumping jacks · 10 high knees · 10 push-ups</text>
+  <text x="860" y="670" font-size="13" text-anchor="middle" fill="#4a5568">screen covered; progress blocked until "I did it!", then the timer restarts</text>
+  <text x="860" y="690" font-size="13" text-anchor="middle" fill="#4a5568">every completed break is recorded for the results screen</text>
+  <path d="M 1025 544 L 1025 598" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#o)"/>
+  <path d="M 695 544 L 695 598" stroke="#c2410c" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#o)"/>
+  <text x="44" y="610" font-size="13" fill="#4a5568">Grading happens on the server.</text>
+  <text x="44" y="630" font-size="13" fill="#4a5568">Answer keys never reach the browser</text>
+  <text x="44" y="648" font-size="13" fill="#4a5568">before the quiz is submitted.</text>
+  <text x="44" y="676" font-size="13" fill="#4a5568">No accounts, no names; sessions live</text>
+  <text x="44" y="694" font-size="13" fill="#4a5568">in memory on 127.0.0.1 only.</text>
+</svg>

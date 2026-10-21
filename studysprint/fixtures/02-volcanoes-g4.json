@@ -1,0 +1,108 @@
+{
+  "id": "demo-volcanoes",
+  "subject": "volcanoes",
+  "topic": "How Volcanoes Form and Erupt",
+  "grade": "4",
+  "concepts": [
+    {
+      "title": "Magma Melts Deep Underground",
+      "explanation": "In some places deep inside the Earth, it is hot enough to melt rock. This melted rock is called magma. Magma is lighter for its size than the solid rock around it, so it slowly rises. It collects in a big pool under the ground called a magma chamber.",
+      "example": "Think of a bubble in a bath. It floats up because it is lighter than the water around it. Magma rises in a similar way."
+    },
+    {
+      "title": "Eruptions and the Parts of a Volcano",
+      "explanation": "Magma holds gas, like the bubbles in soda. When enough gas and magma push up, they burst out. This is an eruption. The magma travels up a tube called the vent. It comes out of a bowl-shaped opening at the top, called the crater. Once magma reaches the surface, we call it lava. Lava cools and hardens into new rock.",
+      "example": "Think of what happens when a shaken soda is opened: the fizz shoots out the top. A volcano erupts in a similar way, but with hot melted rock."
+    },
+    {
+      "title": "Different Kinds of Volcanoes",
+      "explanation": "Volcanoes come in different shapes. Shield volcanoes are wide with gentle slopes. Their runny lava flows far and builds them slowly. Cinder cones are small and steep, made of bits of rock that pile up. Composite volcanoes are tall and pointy. They are built from layers of lava and ash, and they can erupt with a big blast.",
+      "example": "The volcanoes of Hawaii are shield volcanoes. Mount Fuji in Japan is a tall, pointy composite volcano."
+    }
+  ],
+  "diagram": {
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 400\">\n<title>Inside a Volcano</title>\n<desc>Cross-section of a volcano showing magma chamber, vent, crater, lava and ash cloud.</desc>\n<defs>\n<marker id=\"arr\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"7\" markerHeight=\"7\" orient=\"auto-start-reverse\">\n<path d=\"M0,0 L10,5 L0,10 z\" fill=\"#7a2e00\" />\n</marker>\n</defs>\n<rect x=\"0\" y=\"0\" width=\"640\" height=\"260\" fill=\"#e6f4ff\" />\n<rect x=\"0\" y=\"260\" width=\"640\" height=\"140\" fill=\"#ecd9b8\" />\n<line x1=\"0\" y1=\"260\" x2=\"640\" y2=\"260\" stroke=\"#7a5a3a\" stroke-width=\"2\" />\n<text x=\"20\" y=\"34\" font-size=\"24\" font-weight=\"bold\" fill=\"#1a1a1a\">Inside a Volcano</text>\n<ellipse cx=\"300\" cy=\"62\" rx=\"30\" ry=\"20\" fill=\"#9aa5b1\" />\n<ellipse cx=\"335\" cy=\"50\" rx=\"35\" ry=\"24\" fill=\"#8a95a1\" />\n<ellipse cx=\"320\" cy=\"75\" rx=\"26\" ry=\"14\" fill=\"#a7b1bc\" />\n<polygon points=\"150,260 300,90 310,100 330,100 340,90 490,260\" fill=\"#a07850\" stroke=\"#6b4a2b\" stroke-width=\"2\" />\n<line x1=\"342\" y1=\"98\" x2=\"415\" y2=\"182\" stroke=\"#e8590c\" stroke-width=\"10\" stroke-linecap=\"round\" />\n<rect x=\"312\" y=\"98\" width=\"16\" height=\"212\" fill=\"#e8590c\" />\n<ellipse cx=\"320\" cy=\"335\" rx=\"95\" ry=\"38\" fill=\"#f08c00\" stroke=\"#c2410c\" stroke-width=\"3\" />\n<line x1=\"300\" y1=\"320\" x2=\"300\" y2=\"280\" stroke=\"#7a2e00\" stroke-width=\"3\" marker-end=\"url(#arr)\" />\n<text x=\"398\" y=\"50\" font-size=\"17\" fill=\"#1a1a1a\">Ash and gas</text>\n<line x1=\"395\" y1=\"45\" x2=\"370\" y2=\"50\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"230\" y=\"105\" font-size=\"17\" text-anchor=\"end\" fill=\"#1a1a1a\">Crater</text>\n<line x1=\"234\" y1=\"100\" x2=\"306\" y2=\"98\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"200\" y=\"200\" font-size=\"17\" text-anchor=\"end\" fill=\"#1a1a1a\">Vent (tube)</text>\n<line x1=\"204\" y1=\"195\" x2=\"310\" y2=\"195\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"440\" y=\"150\" font-size=\"17\" fill=\"#1a1a1a\">Lava</text>\n<text x=\"440\" y=\"170\" font-size=\"14\" fill=\"#1a1a1a\">(magma outside)</text>\n<line x1=\"436\" y1=\"150\" x2=\"392\" y2=\"155\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"20\" y=\"340\" font-size=\"17\" fill=\"#1a1a1a\">Magma chamber</text>\n<line x1=\"152\" y1=\"335\" x2=\"225\" y2=\"335\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"440\" y=\"300\" font-size=\"17\" fill=\"#1a1a1a\">Magma rises up</text>\n<text x=\"440\" y=\"320\" font-size=\"14\" fill=\"#1a1a1a\">(melted rock)</text>\n<line x1=\"436\" y1=\"295\" x2=\"330\" y2=\"285\" stroke=\"#333\" stroke-width=\"1.5\" />\n<text x=\"560\" y=\"252\" font-size=\"15\" text-anchor=\"middle\" fill=\"#1a1a1a\">Ground</text>\n</svg>",
+    "alt_text": "A cut-away picture of a volcano. Magma in a magma chamber deep underground rises up a tube called the vent, comes out of the crater at the top as lava flowing down the side, and a cloud of ash and gas rises into the sky.",
+    "caption": "Magma rises up the vent and bursts out of the crater. At the surface, it is called lava!",
+    "labels": [
+      "Inside a Volcano",
+      "Ash and gas",
+      "Crater",
+      "Vent (tube)",
+      "Lava",
+      "(magma outside)",
+      "Magma chamber",
+      "Magma rises up",
+      "(melted rock)",
+      "Ground"
+    ]
+  },
+  "questions": [
+    {
+      "question": "What do we call melted rock that is still deep under the ground?",
+      "options": [
+        "Magma",
+        "Ash",
+        "Crater",
+        "Lava"
+      ],
+      "answer_index": 0,
+      "concept_index": 0,
+      "why": "Melted rock is called magma while it is still underground."
+    },
+    {
+      "question": "Why does magma slowly rise up toward the surface?",
+      "options": [
+        "Wind pulls it up",
+        "It is lighter than the solid rock around it",
+        "It is heavier than the rock around it",
+        "It is cold and frozen"
+      ],
+      "answer_index": 1,
+      "concept_index": 0,
+      "why": "Like a bubble in a bath, magma floats up because it is lighter."
+    },
+    {
+      "question": "Magma reaches the surface and flows out. What do we call it now?",
+      "options": [
+        "Cinder cone",
+        "Vent",
+        "Magma chamber",
+        "Lava"
+      ],
+      "answer_index": 3,
+      "concept_index": 1,
+      "why": "Once magma reaches the surface, we call it lava."
+    },
+    {
+      "question": "What is the tube that magma travels up inside a volcano?",
+      "options": [
+        "The ash layer",
+        "The crater",
+        "The vent",
+        "The shield"
+      ],
+      "answer_index": 2,
+      "concept_index": 1,
+      "why": "Magma travels up the vent and comes out of the crater at the top."
+    },
+    {
+      "question": "A volcano is wide with gentle slopes, and its runny lava flows far. What kind is it?",
+      "options": [
+        "A shield volcano",
+        "A composite volcano",
+        "A cinder cone",
+        "A crater volcano"
+      ],
+      "answer_index": 0,
+      "concept_index": 2,
+      "why": "Shield volcanoes, like the ones in Hawaii, are wide with gentle slopes."
+    }
+  ],
+  "meta": {
+    "run": "20261021-093620-volcanoes-g4",
+    "scope_note": "Cover what volcanoes are, how magma from deep inside the Earth rises and erupts as lava, the main parts of a volcano, and a few well-known kinds of volcanoes, explained simply for a fourth grader.",
+    "source": "live agent build runs/20261021-093620-volcanoes-g4 (all scorers passed, reviewer approved)",
+    "edits": "Lightly edited after review: leading praise removed from each 'why'; 'in some places' and 'for its size' added to concept 1; the soda example rephrased so it isn't an instruction; one weak quiz distractor replaced; a diagram label moved off the volcano."
+  }
+}

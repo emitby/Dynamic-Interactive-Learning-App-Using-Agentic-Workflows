@@ -1,0 +1,101 @@
+{
+  "id": "demo-water-cycle",
+  "subject": "The Water Cycle",
+  "topic": "The Water Cycle",
+  "grade": "3",
+  "concepts": [
+    {
+      "title": "The Sun Lifts Water Up",
+      "explanation": "The sun warms water in oceans, lakes and puddles. The warm water turns into a gas called water vapor. You can't see it, but it rises into the sky. This is called evaporation.",
+      "example": "A puddle on the playground slowly gets smaller on a sunny day."
+    },
+    {
+      "title": "Clouds Are Made of Water",
+      "explanation": "High in the sky, the air is cold. The water vapor cools down and turns back into tiny drops of water. Lots of drops together make a cloud. This is called condensation.",
+      "example": "Drops form on the outside of a cold glass of lemonade."
+    },
+    {
+      "title": "Water Falls and Collects",
+      "explanation": "When cloud drops join and get heavy, they fall as rain, snow or hail. This is called precipitation. The water collects in oceans, lakes and rivers. Then the cycle starts again.",
+      "example": "Rain fills a bucket you leave outside."
+    }
+  ],
+  "diagram": {
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 640 400\">\n<defs><marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"9\" refY=\"5\" markerWidth=\"8\" markerHeight=\"8\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"#1d4e89\" /></marker></defs>\n<rect x=\"0\" y=\"0\" width=\"640\" height=\"400\" fill=\"#eef6ff\" />\n<rect x=\"0\" y=\"300\" width=\"640\" height=\"100\" fill=\"#4a90d9\" />\n<polygon points=\"480,300 560,200 640,300\" fill=\"#7a9a5b\" />\n<circle cx=\"70\" cy=\"60\" r=\"36\" fill=\"#f6c343\" />\n<text x=\"52\" y=\"122\" font-size=\"16\" font-family=\"Arial\" fill=\"#0b2545\">Sun</text>\n<ellipse cx=\"330\" cy=\"80\" rx=\"80\" ry=\"32\" fill=\"#ffffff\" stroke=\"#9db4cc\" stroke-width=\"2\" />\n<ellipse cx=\"385\" cy=\"68\" rx=\"60\" ry=\"28\" fill=\"#ffffff\" stroke=\"#9db4cc\" stroke-width=\"2\" />\n<line x1=\"170\" y1=\"290\" x2=\"250\" y2=\"120\" stroke=\"#1d4e89\" stroke-width=\"4\" marker-end=\"url(#arrow)\" />\n<text x=\"20\" y=\"230\" font-size=\"18\" font-family=\"Arial\" fill=\"#0b2545\" font-weight=\"bold\">1. Evaporation</text>\n<text x=\"300\" y=\"30\" font-size=\"18\" font-family=\"Arial\" fill=\"#0b2545\" font-weight=\"bold\">2. Condensation</text>\n<line x1=\"320\" y1=\"122\" x2=\"320\" y2=\"280\" stroke=\"#1d4e89\" stroke-width=\"3\" stroke-dasharray=\"8 10\" />\n<line x1=\"350\" y1=\"118\" x2=\"350\" y2=\"280\" stroke=\"#1d4e89\" stroke-width=\"3\" stroke-dasharray=\"8 10\" />\n<line x1=\"380\" y1=\"112\" x2=\"380\" y2=\"280\" stroke=\"#1d4e89\" stroke-width=\"3\" stroke-dasharray=\"8 10\" />\n<text x=\"395\" y=\"160\" font-size=\"18\" font-family=\"Arial\" fill=\"#0b2545\" font-weight=\"bold\">3. Precipitation</text>\n<line x1=\"470\" y1=\"330\" x2=\"300\" y2=\"330\" stroke=\"#ffffff\" stroke-width=\"4\" marker-end=\"url(#arrow)\" />\n<text x=\"120\" y=\"370\" font-size=\"18\" font-family=\"Arial\" fill=\"#ffffff\" font-weight=\"bold\">4. Collection: water gathers in oceans and lakes</text>\n<path d=\"M 140 330 C 60 330 60 290 120 290\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"4\" stroke-dasharray=\"2 6\" marker-end=\"url(#arrow)\" /><text x=\"20\" y=\"390\" font-size=\"14\" font-family=\"Arial\" fill=\"#ffffff\">...and the cycle starts again</text></svg>",
+    "alt_text": "A diagram of the water cycle: the sun warms water so it evaporates, the vapor condenses into clouds, rain falls as precipitation, and water collects in the ocean.",
+    "caption": "The four steps of the water cycle",
+    "labels": [
+      "Sun",
+      "1. Evaporation",
+      "2. Condensation",
+      "3. Precipitation",
+      "4. Collection: water gathers in oceans and lakes",
+      "...and the cycle starts again"
+    ]
+  },
+  "questions": [
+    {
+      "question": "What makes water rise into the sky?",
+      "options": [
+        "The moon pulls it up",
+        "The wind pushes it up",
+        "The sun warms it into water vapor",
+        "Fish splash it up"
+      ],
+      "answer_index": 2,
+      "concept_index": 0,
+      "why": "Warmth from the sun turns water into vapor, and the vapor rises. That's evaporation!"
+    },
+    {
+      "question": "What is a cloud made of?",
+      "options": [
+        "Cotton",
+        "Smoke",
+        "Sand",
+        "Tiny drops of water"
+      ],
+      "answer_index": 3,
+      "concept_index": 1,
+      "why": "Water vapor cools into tiny drops, and lots of drops make a cloud."
+    },
+    {
+      "question": "Rain, snow and hail are all kinds of what?",
+      "options": [
+        "Evaporation",
+        "Precipitation",
+        "Vapor",
+        "Condensation"
+      ],
+      "answer_index": 1,
+      "concept_index": 2,
+      "why": "Water falling from clouds is called precipitation."
+    },
+    {
+      "question": "Drops form on a cold glass of lemonade. Which step is this like?",
+      "options": [
+        "Collection",
+        "Precipitation",
+        "Condensation",
+        "Evaporation"
+      ],
+      "answer_index": 2,
+      "concept_index": 1,
+      "why": "Vapor in the air cools when it touches the cold glass and turns into drops, just like in a cloud."
+    },
+    {
+      "question": "Where does rain water collect?",
+      "options": [
+        "On the moon",
+        "In oceans, lakes and rivers",
+        "Inside the sun",
+        "In the clouds forever"
+      ],
+      "answer_index": 1,
+      "concept_index": 2,
+      "why": "Rain collects in oceans, lakes and rivers, and then the cycle starts again."
+    }
+  ],
+  "meta": {
+    "source": "hand-written demo fixture"
+  }
+}

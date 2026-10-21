@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "studysprint"
+version = "0.1.0"
+description = "Multi-agent study app: grade-appropriate lessons, diagrams and quizzes with movement breaks"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+include = ["studysprint*"]
+
+[tool.setuptools.package-data]
+studysprint = ["static/*", "fixtures/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Keep pytest's cache inside the project (CLAUDE.md: nothing outside the project).
+cache_dir = ".cache/pytest"
+addopts = "-p no:cacheprovider"
+markers = ["e2e: browser end-to-end tests (Playwright, demo mode)"]

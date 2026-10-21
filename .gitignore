@@ -1,0 +1,15 @@
+# Virtual environment and caches (all kept inside the project by the launchers)
+.venv/
+.cache/
+.pytest_tmp/
+__pycache__/
+*.egg-info/
+build/
+
+# Generated per run (lesson builds, eval reports). Example artifacts live in docs/.
+runs/
+evals/results/
+
+# Secrets
+.env
+*.key

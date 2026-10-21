@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Study Sprint</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo" aria-hidden="true">⚡</span> Study Sprint</div>
+    <div id="timer" class="timer" hidden aria-live="off">
+      <span class="timer-label">Time left</span>
+      <span id="timer-value" class="timer-value">1:00</span>
+    </div>
+  </header>
+  <div id="demo-banner" class="demo-banner" hidden>Demo mode: showing a sample lesson (no AI calls).</div>
+
+  <main id="app">
+    <!-- 1. Start: subject and grade -->
+    <section id="screen-start" class="screen card">
+      <h1>What would you like to study today?</h1>
+      <p class="lead">Pick a subject and your grade. You'll get three key ideas, a picture and a quick quiz,
+        plus a movement break whenever the 1-minute timer runs out!</p>
+      <form id="start-form" novalidate>
+        <label for="subject">Subject</label>
+        <input id="subject" name="subject" type="text" maxlength="60" autocomplete="off"
+               placeholder="e.g. volcanoes, fractions, the solar system" required>
+        <label for="grade">Grade</label>
+        <select id="grade" name="grade" required></select>
+        <p id="start-error" class="error" role="alert" hidden></p>
+        <button id="start-button" class="btn primary" type="submit">Build my lesson</button>
+      </form>
+    </section>
+
+    <!-- 2. Building: progress while the agents work -->
+    <section id="screen-building" class="screen card" hidden>
+      <h1>Building your lesson…</h1>
+      <div class="spinner" aria-hidden="true"></div>
+      <!-- Announced to screen readers; visually the step list below already shows the current stage. -->
+      <p id="build-stage" class="sr-only" aria-live="polite">Getting started</p>
+      <ol id="build-steps" class="steps"></ol>
+    </section>
+
+    <!-- 3. Reading: three concepts + diagram -->
+    <section id="screen-reading" class="screen" hidden>
+      <div class="card">
+        <p class="eyebrow" id="lesson-grade"></p>
+        <h1 id="lesson-topic"></h1>
+        <p class="lead">Read the three key ideas and look at the picture. When you're ready, choose
+          <strong>Finished Reading</strong> to start the quiz.</p>
+      </div>
+      <div id="concepts" class="concepts"></div>
+      <figure class="card diagram">
+        <img id="diagram-img" alt="">
+        <figcaption id="diagram-caption"></figcaption>
+      </figure>
+      <div class="card finish">
+        <label class="radio-big">
+          <input type="radio" id="finished-reading" name="reading-state" value="finished">
+          <span>Finished Reading</span>
+        </label>
+      </div>
+    </section>
+
+    <!-- 4. Quiz -->
+    <section id="screen-quiz" class="screen" hidden>
+      <div class="card">
+        <p class="eyebrow">Quick quiz</p>
+        <h1>5 questions. You've got this!</h1>
+      </div>
+      <form id="quiz-form" novalidate>
+        <div id="questions"></div>
+        <p id="quiz-error" class="error" role="alert" hidden></p>
+        <button id="submit-quiz" class="btn primary" type="submit" disabled>Check my answers</button>
+      </form>
+    </section>
+
+    <!-- 5. Results -->
+    <section id="screen-results" class="screen" hidden>
+      <div class="card results-hero">
+        <p id="results-headline" class="headline"></p>
+        <p id="results-detail" class="lead"></p>
+        <div class="score-row">
+          <div class="score-box"><span class="score-label">Score</span><span id="results-score" class="score-value"></span></div>
+          <div class="score-box"><span class="score-label">Correct</span><span id="results-percent" class="score-value"></span></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Exercises you completed</h2>
+        <ul id="results-exercises" class="exercise-list"></ul>
+      </div>
+      <div class="card">
+        <h2>Answer review</h2>
+        <ol id="results-review" class="review"></ol>
+      </div>
+      <button id="start-over" class="btn primary big" type="button">Start Over</button>
+    </section>
+  </main>
+
+  <!-- Movement-break modal: shown when the 1-minute timer reaches zero -->
+  <div id="break-modal" class="modal-backdrop" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="break-title">
+      <p class="eyebrow">Time for a movement break!</p>
+      <h2 id="break-title">Stand up and do:</h2>
+      <p id="break-exercise" class="exercise"></p>
+      <p class="safety-note">Move safely, with space around you. Skip anything that hurts.</p>
+      <button id="break-done" class="btn primary big" type="button">I did it!</button>
+    </div>
+  </div>
+</body>
+</html>
