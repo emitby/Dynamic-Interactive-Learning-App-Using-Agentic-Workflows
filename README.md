@@ -1,6 +1,6 @@
 # Study Sprint
 
-[![CI](https://github.com/emitby/Study-Sprint/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Study-Sprint/actions/workflows/ci.yml)
+[![CI](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
 ![Tests](https://img.shields.io/badge/tests-185-success)
