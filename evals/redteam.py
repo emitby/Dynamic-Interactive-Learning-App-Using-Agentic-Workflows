@@ -7,9 +7,10 @@ which protection broke.
 
 import copy
 import json
+from pathlib import Path
 
 from studysprint.lesson import quiz_problems
-from studysprint.paths import FIXTURES_DIR, ConfinementError, confine
+from studysprint.paths import FIXTURES_DIR, PROJECT_DIR, ConfinementError, confine
 from studysprint.safety import SafetyError, content_problems, topic_gate, validate_subject
 from studysprint.svg_sanitize import check_svg
 
@@ -121,7 +122,10 @@ def run_cases():
         record(f"svg: {desc}", block, not check_svg(svg).ok)
     for desc, items, block in _quiz_cases():
         record(f"quiz: {desc}", block, bool(quiz_problems(items, "3")))
-    for desc, path in (("parent directory", "../outside.txt"), ("absolute system path", "C:/Windows/win.ini")):
+    # Built from the filesystem root, so it is outside the project on every OS
+    # ("C:/Windows/..." would be an ordinary relative name on Linux).
+    system_file = Path(PROJECT_DIR.anchor) / "Windows" / "win.ini"
+    for desc, path in (("parent directory", "../outside.txt"), ("absolute system path", system_file)):
         try:
             confine(path)
             blocked = False

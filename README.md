@@ -3,7 +3,7 @@
 [![CI](https://github.com/emitby/Study-Sprint/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Study-Sprint/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
-![Tests](https://img.shields.io/badge/tests-184-success)
+![Tests](https://img.shields.io/badge/tests-185-success)
 ![Live evals](https://img.shields.io/badge/live%20matrix-9%2F9-success)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
@@ -100,7 +100,7 @@ Live eval matrix with the real agents, Kindergarten to College (2026-10-21, afte
 | derivatives (College) | Introduction to Derivatives in Calculus | $0.27 | 84 s | 8/8 |
 | asdfghjkl (3) | Declined kindly, as expected | $0.01 | 4 s | n/a |
 
-**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 184 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
+**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 185 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
 
 The first matrix run went 8/9. The Reviewer Agent caught a real factual error in the ancient Egypt lesson. Then, after the concepts were revised, it caught a diagram that contradicted them, because the harness hadn't redrawn it. A concepts revision now redoes the diagram and the quiz. Details: [docs/evals.md](docs/evals.md).
 

@@ -1,6 +1,7 @@
 """CLAUDE.md guardrails, enforced by tests: confinement, no `os`, no deletions, caches inside the project."""
 
 import re
+import sys
 from pathlib import Path
 
 import pytest
@@ -17,14 +18,25 @@ def test_sources_found():
     assert len(SOURCES) > 15
 
 
-@pytest.mark.parametrize("path", ["..\\evil.txt", "../evil.txt", "runs/../../evil.txt", "C:\\Windows\\win.ini", "/etc/passwd"])
+# Escapes on every OS, plus Windows-only spellings. On Linux/macOS, "..\evil.txt" and
+# "C:\Windows\win.ini" are ordinary file names *inside* the project, so allowing them there is correct.
+OUTSIDE = ["../evil.txt", "runs/../../evil.txt", str(Path(PROJECT_DIR.anchor) / "etc" / "passwd")]
+if sys.platform == "win32":
+    OUTSIDE += ["..\\evil.txt", "C:\\Windows\\win.ini"]
+
+
+@pytest.mark.parametrize("path", OUTSIDE)
 def test_confine_rejects_outside_paths(path):
     with pytest.raises(ConfinementError):
         confine(path)
 
 
-def test_confine_accepts_project_paths_and_extended_prefix():
+def test_confine_accepts_project_paths():
     assert confine("runs/x") == PROJECT_DIR / "runs" / "x"
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="the \\\\?\\ extended-length prefix exists only on Windows")
+def test_confine_accepts_windows_extended_prefix():
     assert confine("\\\\?\\" + str(PROJECT_DIR / "docs")) == PROJECT_DIR / "docs"
 
 

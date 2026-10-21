@@ -21,7 +21,7 @@ User decisions:
 
 - **Built:** FastAPI app with a vanilla JS front end, five Claude agents (Intake, Curriculum, Diagram, Quiz, Reviewer), a deterministic harness, demo mode, evals and a PDF guide with screenshots (`docs/how-it-works.pdf`).
 - **Verified:**
-  - 184 tests (unit, API and Chromium end-to-end), including scans for `os` imports, deletion calls and missing docstrings
+  - 185 tests (unit, API and Chromium end-to-end), including scans for `os` imports, deletion calls and missing docstrings
   - 45/45 red-team cases
   - **live matrix 9/9** (K to College, 100% on all 8 scorers; $0.13–0.27 and 33–84 s per lesson)
 - **Defects found:**

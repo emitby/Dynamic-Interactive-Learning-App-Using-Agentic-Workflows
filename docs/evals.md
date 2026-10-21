@@ -12,11 +12,11 @@ Five layers, from free and instant to live and paid. Every layer can fail: each 
 
 Plus **visual review**: a subagent reviews the screenshots, the PDF and sample lessons. Every finding becomes a fix, and a check where one is possible.
 
-## 1–2. Tests (184)
+## 1–2. Tests (185)
 
 | File | Tests | Covers |
 |---|---|---|
-| `test_project_guardrails.py` | 13 | CLAUDE.md rules. Confinement (including `..`, absolute and `\\?\` paths). **No `import os`** and **no deletion calls** in any file (source scans). Fresh run directories and atomic writes. Caches confined by the launchers. Loopback-only server. **A docstring on every module, class and function.** |
+| `test_project_guardrails.py` | 14 | CLAUDE.md rules. Confinement (`..` and absolute paths on every OS; Windows-only spellings and the `\\?\` prefix run on Windows and are skipped elsewhere). **No `import os`** and **no deletion calls** in any file (source scans). Fresh run directories and atomic writes. Caches confined by the launchers. Loopback-only server. **A docstring on every module, class and function.** |
 | `test_readability.py` | 14 | Syllables, sentences and decimals, Flesch–Kincaid against a hand calculation, grade bands and ranges |
 | `test_safety.py` | 49 | Valid and invalid subjects (injection, markup), quoting, hard blocks at every grade, age gates both sides, **benign look-alikes allowed**, unsafe vs clean agent text |
 | `test_svg_sanitize.py` | 21 | A good SVG canonicalized. Comments dropped. 16 attack and invalid variants rejected (script, handlers, style, foreignObject, image, xlink, external `url()`, `javascript:`, DTD, malformed, …). Size limit. De-duplicated errors. |
@@ -81,7 +81,7 @@ Across both runs, 17 of 18 lessons built as expected. The intake narrowed "scien
 ## Re-running
 
 ```powershell
-.\run.ps1 test                    # 184 tests, about 20 s
+.\run.ps1 test                    # 185 tests, about 20 s
 .\run.ps1 eval                    # latest build + red-team
 .\run.ps1 eval --run runs\<id>    # a specific build
 .\run.ps1 eval --live             # live matrix (API credits)
