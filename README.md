@@ -1,15 +1,14 @@
 # Study Sprint
 
+**Pick any subject and grade, and five Claude agents build a fact-checked lesson (three concepts, a diagram and a 5-question quiz) while a 1-minute timer triggers movement breaks.**
+
 [![CI](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
-![Tests](https://img.shields.io/badge/tests-185-success)
+![Tests](https://img.shields.io/badge/tests-185%20passing-success)
+![Red-team](https://img.shields.io/badge/red--team-45%2F45-success)
 ![Live evals](https://img.shields.io/badge/live%20matrix-9%2F9-success)
+![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-
-**A multi-agent study app with movement breaks.** Pick any subject and a grade from Kindergarten to College. Five Claude agents build a lesson at the right level: **three key concepts**, a **labeled diagram** and a **5-question quiz**. A **1-minute timer** runs while you read and while you take the quiz. When it runs out, you do a random exercise (10 jumping jacks, 10 high knees or 10 push-ups) before continuing. The results screen celebrates your score and lists the exercises you completed.
-
-**→ [How it works (12-page PDF with screenshots)](docs/how-it-works.pdf)** · [Screenshot gallery](docs/screenshots.md) · [Agent workflow](docs/workflow.md)
 
 <p align="center">
   <img src="docs/images/screens/03-reading.png" width="49%" alt="Reading screen: three concepts and an agent-drawn volcano diagram">
@@ -18,25 +17,55 @@
   <img src="docs/images/screens/07-results.png" width="49%" alt="Results: Great work!, score, percentage and exercises completed">
 </p>
 
+**→ [How it works (12-page PDF with screenshots)](docs/how-it-works.pdf)** · [Screenshot gallery](docs/screenshots.md) · [Agent workflow](docs/workflow.md) · [Evals](docs/evals.md)
+
+## Results
+
+| Eval | Result |
+|---|---|
+| Unit, API and browser end-to-end tests (offline) | **185 / 185 passing** on Python 3.10–3.12 in CI |
+| Guardrail red-team (unsafe subjects, injections, malicious SVG, unkind or personal content) | **45 / 45** blocked, with benign look-alikes allowed |
+| Live matrix with the real agents, Kindergarten to College | **9 / 9** outcomes as expected, **8 / 8 scorers** on every lesson |
+| Cost and speed (live) | $0.13–$0.27 and 33–84 s per lesson |
+
+The first live matrix went 8/9: the Reviewer Agent caught a real factual error, then a diagram that contradicted the revised concepts. The harness now redraws the diagram and quiz after any concepts revision. Per-lesson results are in [Live results](#live-results) below; methods are in [docs/evals.md](docs/evals.md).
+
+## Quick start
+
+```powershell
+python -m venv .venv
+.venv\Scripts\python.exe -m pip install --no-cache-dir -r requirements.txt -e .
+.\run.ps1 serve --demo       # sample lessons, no API key -> http://127.0.0.1:8000
+```
+
+Live lessons need an [Anthropic API key](https://console.anthropic.com/) in `ANTHROPIC_API_KEY`. On macOS or Linux, use `./run.sh`. More commands are in [Commands](#commands).
+
 ## How it works
 
-![How the agents work together](docs/images/agent-workflow.svg)
-
-The same flow as a Mermaid chart:
+Pick a subject and a grade from Kindergarten to College. Five Claude agents build a lesson at the right level: **three key concepts**, a **labeled diagram** and a **5-question quiz**. A **1-minute timer** runs while you read and while you take the quiz. When it runs out, you do a random exercise (10 jumping jacks, 10 high knees or 10 push-ups) before continuing. The results screen celebrates your score and lists the exercises you completed.
 
 ```mermaid
 flowchart LR
-    U([Learner: subject + grade]) --> G{Topic gate<br/>code}
+    U([Learner: subject + grade]) --> G{{"Topic gate (code)<br/>blocked subjects never reach an agent"}}
     G -- blocked --> X([Kind decline])
     G --> I[Intake Agent<br/>scope or decline]
     I --> C[Curriculum Agent<br/>3 concepts]
-    C --> D[Diagram Agent<br/>SVG]
-    C --> Q[Quiz Agent<br/>5 questions]
-    D --> R[Reviewer Agent<br/>accuracy]
-    Q --> R
+    C --> VC{{"Reading level + safety<br/>(code)"}}
+    VC --> D[Diagram Agent<br/>SVG]
+    VC --> Q[Quiz Agent<br/>5 questions]
+    D --> VD{{"SVG sanitizer<br/>(code)"}}
+    Q --> VQ{{"Quiz rules + safety<br/>(code)"}}
+    VD --> R[Reviewer Agent<br/>accuracy]
+    VQ --> R
     R -- revise, up to 2x --> C
-    R -- approve --> W([Web app: read → move → quiz → move → results])
+    R -- approve --> W([Web app: read → move → quiz → move → results<br/>graded on the server])
+    classDef guard fill:#fff4d6,stroke:#b45309,color:#78350f
+    class G,VC,VD,VQ guard
 ```
+
+Amber hexagons are guardrails enforced in code. Each agent's tool re-checks its own output, and the harness re-checks every hand-off with the same rules, so a failed check sends the error back to the agent or stops the build. Details: [docs/harness.md](docs/harness.md) and [docs/guardrails.md](docs/guardrails.md).
+
+![How the agents work together](docs/images/agent-workflow.svg)
 
 | Step | What happens | Done by |
 |---|---|---|
@@ -59,7 +88,7 @@ flowchart LR
   - grading
   - every hand-off check
 
-## Quick start
+## Commands
 
 Requires Python 3.10+. Live lessons need an [Anthropic API key](https://console.anthropic.com/) in `ANTHROPIC_API_KEY`. Demo mode needs none.
 
@@ -84,7 +113,7 @@ On macOS or Linux, use `./run.sh` with the same commands.
 
 > **Always use the launcher.** It keeps Python's bytecode cache and Playwright's browsers inside the project, as the [CLAUDE.md](CLAUDE.md) guardrails require.
 
-## Results
+## Live results
 
 Live eval matrix with the real agents, Kindergarten to College (2026-10-21, after fixes):
 
