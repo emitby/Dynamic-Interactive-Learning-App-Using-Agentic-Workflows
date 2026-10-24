@@ -11,11 +11,10 @@ jobs:
       PYTHONPYCACHEPREFIX: ${{ github.workspace }}/.cache/pycache
       PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.cache/ms-playwright
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install --no-cache-dir -r requirements.txt -e .
       - run: python -m playwright install --with-deps chromium
       - run: python -m pytest -q
-      - run: python -m evals.run_evals   # red-team suite (no saved lesson in CI, so scorers are skipped)

@@ -3,6 +3,7 @@
 **Pick any subject and grade, and five Claude agents build a fact-checked lesson (three concepts, a diagram and a 5-question quiz) while a 1-minute timer triggers movement breaks.**
 
 [![CI](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml)
+[![Evals](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Tests](https://img.shields.io/badge/tests-185%20passing-success)
 ![Red-team](https://img.shields.io/badge/red--team-45%2F45-success)
