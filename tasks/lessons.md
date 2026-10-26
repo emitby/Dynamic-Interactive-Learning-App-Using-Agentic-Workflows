@@ -26,6 +26,10 @@ Learned deploying to Render (2026-10-25):
 - **Stop test servers by PID, never by image name or a wildcard filter.** A `taskkill /IM python.exe` cleanup could have killed the user's own running server. Look up the PID listening on the test port first, then stop that PID and its child.
 - **Drive a multi-step flow in the order the app enforces.** A 409 from `finish-reading` was the test skipping "break done", not a bug. Read the route's rules before treating an error as a failure.
 - **Never chain heredocs with `||` as a fallback.** `python - <<EOF ... || python - <<EOF2` ran an empty script that succeeded, so the real edit silently never ran. One interpreter, one heredoc, and assert the targets.
-- **Match the file's line endings in scripted replacements.** `run.ps1` is CRLF, so an LF target matched nothing; the assert caught it. Use the Edit tool or read bytes and match `
-`.
+- **Match the file's line endings in scripted replacements.** `run.ps1` is CRLF, so an LF target matched nothing; the assert caught it. Use the Edit tool or read bytes and match `\r\n`.
 - **Print with `flush=True` in anything a host runs.** Piped stdout is buffered, so a startup line never reached the deploy log.
+
+Learned adding the guard hook (2026-10-26):
+
+- **Probe a new guard with an action that is harmless if the guard fails.** The hook was tested live with a dry-run clean and a `-WhatIf` removal: blocked if it works, a no-op preview if it doesn't. Never probe a write guard with a real write outside the project.
+- **The shell guard reads the whole command text, heredocs included.** Docs that mention deletion commands, written through a heredoc, were blocked. Edit documentation with the Edit tool, which is checked by path. Never route around the hook with a script file.

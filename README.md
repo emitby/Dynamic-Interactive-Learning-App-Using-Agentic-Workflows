@@ -5,7 +5,7 @@
 [![CI](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml)
 [![Evals](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Tests](https://img.shields.io/badge/tests-197%20passing-success)
+![Tests](https://img.shields.io/badge/tests-236%20passing-success)
 ![Red-team](https://img.shields.io/badge/red--team-45%2F45-success)
 ![Live evals](https://img.shields.io/badge/live%20matrix-9%2F9-success)
 ![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
@@ -24,7 +24,7 @@
 
 | Eval | Result |
 |---|---|
-| Unit, API and browser end-to-end tests (offline) | **197 / 197 passing** on Python 3.10–3.12 in CI |
+| Unit, API and browser end-to-end tests (offline) | **236 / 236 passing** on Python 3.10–3.12 in CI |
 | Guardrail red-team (unsafe subjects, injections, malicious SVG, unkind or personal content) | **45 / 45** blocked, with benign look-alikes allowed |
 | Live matrix with the real agents, Kindergarten to College | **9 / 9** outcomes as expected, **8 / 8 scorers** on every lesson |
 | Cost and speed (live) | $0.13–$0.27 and 33–84 s per lesson |
@@ -141,7 +141,7 @@ Live eval matrix with the real agents, Kindergarten to College (2026-10-21, afte
 | derivatives (College) | Introduction to Derivatives in Calculus | $0.27 | 84 s | 8/8 |
 | asdfghjkl (3) | Declined kindly, as expected | $0.01 | 4 s | n/a |
 
-**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 197 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
+**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 236 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
 
 The first matrix run went 8/9. The Reviewer Agent caught a real factual error in the ancient Egypt lesson. Then, after the concepts were revised, it caught a diagram that contradicted them, because the harness hadn't redrawn it. A concepts revision now redoes the diagram and the quiz. Details: [docs/evals.md](docs/evals.md).
 
@@ -180,6 +180,7 @@ evals/              scorers.py, redteam.py, run_evals.py
 tests/              unit, API and Playwright end-to-end tests (scripted fake Claude client)
 docs/               guides and how-it-works.pdf
 runs/<id>/          one folder per lesson build: lesson.json, review.json, trace.jsonl, manifest.json
+.claude/            Claude Code hook that blocks deletions and writes outside the project
 ```
 
 ## Safety and privacy

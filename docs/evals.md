@@ -12,7 +12,7 @@ Five layers, from free and instant to live and paid. Every layer can fail: each 
 
 Plus **visual review**: a subagent reviews the screenshots, the PDF and sample lessons. Every finding becomes a fix, and a check where one is possible.
 
-## 1–2. Tests (197)
+## 1–2. Tests (236)
 
 | File | Tests | Covers |
 |---|---|---|
@@ -24,6 +24,7 @@ Plus **visual review**: a subagent reviews the screenshots, the PDF and sample l
 | `test_sessions.py` | 20 | Only the 3 exercises, all reachable. Summary counts. Breaks in both phases. **A pending break blocks progress.** Idempotent break requests. Phases only move forward. Malformed answers. Partial scores. A positive message at every score. |
 | `test_harness.py` | 16 | Happy path and artifacts. Topic gate before any agent (zero API calls). Quoted subject. Intake decline. **Blocked-topic laundering refused.** Self-correction after a measured rejection. **A concepts revision redoes diagram and quiz** (live-eval regression). Two revisions then approval. Final rejection fails. Missing hand-off. Turn limit, budget, unknown tool, bad arguments, refusal. Model and caching. Answer keys preserved through the shuffle. |
 | `test_api.py` | 18 | The demo flow over HTTP. **No answer leak before grading.** Input errors (400). Immediate decline. 404s. **Security headers** (CSP without `unsafe-inline`, nosniff, no `/docs`). Live mode with fake Claude. A friendly failure message. **The concurrent-build cap (429).** **Password: 401 on every route but the health check, then the full flow with it.** **The daily lesson cap (429) and its reset the next day.** |
+| `test_guard_hook.py` | 39 | The Claude Code hook, run as Claude Code runs it (JSON on stdin, exit code). **Writes outside the project blocked** for every file tool and through shell redirects, `cp`/`mv`/`touch`, `~`, `$HOME`, `$env:TEMP`, Git Bash and Windows spellings. **Every deletion form blocked** (`rm`, `sudo`/`xargs`/`&` rm, `find -delete`, `git clean`, Python `rmtree`, `Remove-Item`). Normal work allowed. **Fails closed** on bad input. |
 | `test_evals.py` | 15 | Every scorer passes the good lesson and **fails its planted defect**. Run-health failures. Missing lessons. The red-team all passes. |
 | `test_e2e.py` | 6 | **Chromium:** start screen. Reading timer → break → restart to 1:00 → break again. Full flow with breaks in reading and quiz, results, Start Over. A perfect score without breaks. Blocked and invalid subjects. Phone layout (stacked, no horizontal scroll). |
 
@@ -81,7 +82,7 @@ Across both runs, 17 of 18 lessons built as expected. The intake narrowed "scien
 ## Re-running
 
 ```powershell
-.\run.ps1 test                    # 197 tests, about 20 s
+.\run.ps1 test                    # 236 tests, about 25 s
 .\run.ps1 eval                    # latest build + red-team
 .\run.ps1 eval --run runs\<id>    # a specific build
 .\run.ps1 eval --live             # live matrix (API credits)

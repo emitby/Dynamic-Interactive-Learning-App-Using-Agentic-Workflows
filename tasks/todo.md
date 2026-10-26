@@ -83,3 +83,16 @@ Decisions (user): keep the public demo and add a live service; the shell passes 
 
 - **Left out:** "hooks". The project uses no Claude Code hooks, so the box doesn't claim them.
 - **Not updated:** the screenshots in `docs/` and `docs/how-it-works.pdf` show the old start screen until `run.ps1 guide` is rerun.
+
+## Task 5: Claude Code guard hook (2026-10-26)
+
+- [x] 1. `.claude/hooks/guard_paths.py`: PreToolUse hook; blocks deletions and writes outside the project; fails closed
+- [x] 2. `.claude/settings.json`: run it before Write, Edit, MultiEdit, NotebookEdit, Bash and PowerShell
+- [x] 3. `tests/test_guard_hook.py`: 39 cases through the real stdin/exit-code protocol
+- [x] 4. Docs: README, evals.md, guardrails.md H12, "About this project" box (a hooks bullet, now true)
+
+## Review (Task 5)
+
+- **Verified:** 236 tests pass. Live in Claude Code, a dry-run clean (Bash) and a `-WhatIf` removal (PowerShell) were blocked before running; a write inside `.cache/` and the test suite ran normally.
+- **Found:** the hook blocked a doc-editing heredoc whose text mentioned deletion commands (a false positive, safe direction). Doc edits moved to the Edit tool.
+- **Limits:** shell checks read the command text, so a path built at run time, or a script that writes files itself, isn't seen. Reads outside the project aren't blocked. The hook command uses `.venv/Scripts/python.exe` (Windows); macOS/Linux would need `.venv/bin/python`.
