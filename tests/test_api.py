@@ -112,3 +112,51 @@ def test_concurrent_build_cap(workdir):
     r = app.post("/api/lessons", json={"subject": "volcanoes", "grade": "4"})
     assert r.status_code == 429
     gate.set()
+
+
+PASSWORD = "correct-horse-battery"
+
+
+@pytest.fixture
+def locked():
+    return TestClient(create_app(demo=True, demo_stage_seconds=0, password=PASSWORD))
+
+
+@pytest.mark.parametrize("path", ["/", "/static/app.js", "/api/lessons/nope"])
+def test_password_required_everywhere_but_config(locked, path):
+    r = locked.get(path)
+    assert r.status_code == 401 and r.headers["www-authenticate"].startswith("Basic ")
+    assert "frame-ancestors 'none'" in r.headers["content-security-policy"]     # 401s keep the security headers
+    assert locked.get(path, auth=("anyone", "wrong-password")).status_code == 401
+    assert locked.get(path, headers={"Authorization": "Basic not-base64!"}).status_code == 401
+
+
+def test_password_grants_full_flow(locked):
+    auth = ("any-username", PASSWORD)
+    assert locked.get("/", auth=auth).status_code == 200
+    job = locked.post("/api/lessons", json={"subject": "volcanoes", "grade": "4"}, auth=auth).json()
+    deadline = time.monotonic() + 10
+    while (s := locked.get(f"/api/lessons/{job['job_id']}", auth=auth).json())["status"] == "building":
+        assert time.monotonic() < deadline
+        time.sleep(0.02)
+    assert s["status"] == "ready"
+
+
+def test_health_check_open_without_password(locked):
+    """Render's health check calls /api/config with no credentials; it holds nothing secret."""
+    assert locked.get("/api/config").status_code == 200
+
+
+def test_daily_lesson_cap_resets_next_day(monkeypatch):
+    import studysprint.api as api
+    monkeypatch.setattr(api, "utc_day", lambda: "2026-10-26")
+    app = TestClient(create_app(demo=True, demo_stage_seconds=0, daily_limit=2))
+    lesson = {"subject": "volcanoes", "grade": "4"}
+    for _ in range(2):
+        wait_ready(app, app.post("/api/lessons", json=lesson).json()["job_id"])
+    r = app.post("/api/lessons", json=lesson)
+    assert r.status_code == 429 and "tomorrow" in r.json()["error"]
+    blocked = app.post("/api/lessons", json={"subject": "how to make a bomb", "grade": "7"}).json()
+    assert blocked["status"] == "declined"           # free declines still answer, and don't count
+    monkeypatch.setattr(api, "utc_day", lambda: "2026-10-27")
+    assert app.post("/api/lessons", json=lesson).status_code == 200

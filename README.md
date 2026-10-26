@@ -5,7 +5,7 @@
 [![CI](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/ci.yml)
 [![Evals](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml/badge.svg)](https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows/actions/workflows/evals.yml)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![Tests](https://img.shields.io/badge/tests-185%20passing-success)
+![Tests](https://img.shields.io/badge/tests-197%20passing-success)
 ![Red-team](https://img.shields.io/badge/red--team-45%2F45-success)
 ![Live evals](https://img.shields.io/badge/live%20matrix-9%2F9-success)
 ![Agents](https://img.shields.io/badge/agents-5%20x%20claude--opus--5--5-8a5a2b)
@@ -24,7 +24,7 @@
 
 | Eval | Result |
 |---|---|
-| Unit, API and browser end-to-end tests (offline) | **185 / 185 passing** on Python 3.10–3.12 in CI |
+| Unit, API and browser end-to-end tests (offline) | **197 / 197 passing** on Python 3.10–3.12 in CI |
 | Guardrail red-team (unsafe subjects, injections, malicious SVG, unkind or personal content) | **45 / 45** blocked, with benign look-alikes allowed |
 | Live matrix with the real agents, Kindergarten to College | **9 / 9** outcomes as expected, **8 / 8 scorers** on every lesson |
 | Cost and speed (live) | $0.13–$0.27 and 33–84 s per lesson |
@@ -114,6 +114,17 @@ On macOS or Linux, use `./run.sh` with the same commands.
 
 > **Always use the launcher.** It keeps Python's bytecode cache and Playwright's browsers inside the project, as the [CLAUDE.md](CLAUDE.md) guardrails require.
 
+## Deploy to Render
+
+[render.yaml](render.yaml) defines two free web services:
+
+| Service | What it serves | Needs |
+|---|---|---|
+| `study-sprint` | Public demo: the sample lessons, no API key, no cost | nothing |
+| `study-sprint-live` | Live AI lessons behind a password, at most 30 lessons per UTC day | `ANTHROPIC_API_KEY`, `STUDYSPRINT_PASSWORD` (12+ characters) |
+
+In the Render dashboard, choose **New > Blueprint** (or **Sync** an existing one) and pick this repository. Render asks for the two secrets, which stay in Render, not git. The live service won't start without a strong password, so a missing secret fails the deploy instead of opening the site. Setting a monthly spend limit in the Anthropic Console is a good second safety net.
+
 ## Live results
 
 Live eval matrix with the real agents, Kindergarten to College (2026-10-21, after fixes):
@@ -130,7 +141,7 @@ Live eval matrix with the real agents, Kindergarten to College (2026-10-21, afte
 | derivatives (College) | Introduction to Derivatives in Calculus | $0.27 | 84 s | 8/8 |
 | asdfghjkl (3) | Declined kindly, as expected | $0.01 | 4 s | n/a |
 
-**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 185 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
+**9/9 outcomes as expected, with 100% on every scorer.** Also passing: 197 tests (unit, API and browser end-to-end) and 45/45 red-team cases.
 
 The first matrix run went 8/9. The Reviewer Agent caught a real factual error in the ancient Egypt lesson. Then, after the concepts were revised, it caught a diagram that contradicted them, because the harness hadn't redrawn it. A concepts revision now redoes the diagram and the quiz. Details: [docs/evals.md](docs/evals.md).
 
@@ -178,7 +189,7 @@ runs/<id>/          one folder per lesson build: lesson.json, review.json, trace
 - **Diagrams can't run code.** They're sanitized, then shown as images.
 - **The answer key stays on the server** until the quiz is graded.
 - **No accounts.** No names or personal data are collected, and sessions live only in memory.
-- **Runs locally.** The server binds to `127.0.0.1` only.
+- **Runs locally.** The server binds to `127.0.0.1` only. When hosted ([Deploy to Render](#deploy-to-render)), the live AI version requires a password and builds at most 30 lessons a day.
 
 Movement breaks are suggestions: the app reminds learners to move safely and skip anything that hurts.
 

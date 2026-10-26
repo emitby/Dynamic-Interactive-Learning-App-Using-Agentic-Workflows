@@ -2,6 +2,9 @@
 
 Commands:
     serve [--demo] [--port N]          run the web app on http://127.0.0.1:N (default 8000)
+    serve --public [--demo] [--password PW] --port N
+                                       hosting (Render): listen on all interfaces; live agents
+                                       need a password and get a daily lesson cap
     build "subject" --grade G          build one lesson with the agents and print a summary
     guide                              take screenshots of the app (demo mode) and build docs/how-it-works.pdf
 
@@ -14,15 +17,45 @@ configuration access).
 import argparse
 import sys
 
-#: Loopback only. The app is a personal study tool and must not be reachable from the network.
+#: Default: loopback only. Run locally, the app is a personal study tool and must not be
+#: reachable from the network.
 HOST = "127.0.0.1"
+
+#: ``serve --public`` only: all interfaces, so a host such as Render can route traffic in.
+PUBLIC_HOST = "0.0.0.0"
+
+
+def check_serve_args(args):
+    """Refuse a public server that would let anyone spend API credits.
+
+    A public live server must have a password of at least
+    :data:`~studysprint.config.MIN_PASSWORD_CHARS` characters. Render passes the password
+    as ``--password "$STUDYSPRINT_PASSWORD"``, so an unset variable arrives as ``""`` and is
+    refused here: a missing secret fails the deploy instead of publishing an open site.
+
+    Args:
+        args: Parsed ``serve`` arguments with ``public``, ``demo`` and ``password``.
+
+    Returns:
+        An error message, or ``None`` if the arguments are safe.
+    """
+    from studysprint.config import MIN_PASSWORD_CHARS
+    if args.public and not args.demo and len(args.password or "") < MIN_PASSWORD_CHARS:
+        return (f"serve --public with live agents needs --password of at least {MIN_PASSWORD_CHARS} "
+                "characters (set STUDYSPRINT_PASSWORD on the host).")
+    return None
 
 
 def cmd_serve(args):
     """Run the web app with uvicorn until interrupted (Ctrl+C).
 
+    Locally it listens on :data:`HOST`. With ``--public`` it listens on
+    :data:`PUBLIC_HOST`, and live agents also get the daily lesson cap
+    (:data:`~studysprint.config.DAILY_LESSON_LIMIT`). The password is never printed.
+
     Args:
-        args: Parsed arguments with ``demo`` and ``port``.
+        args: Parsed arguments with ``demo``, ``port``, ``public`` and ``password``
+            (already checked by :func:`check_serve_args`).
 
     Returns:
         Exit code 0.
@@ -30,8 +63,14 @@ def cmd_serve(args):
     import uvicorn
 
     from studysprint.api import create_app
-    print(f"Study Sprint on http://{HOST}:{args.port}  ({'demo mode' if args.demo else 'live agents'})")
-    uvicorn.run(create_app(demo=args.demo), host=HOST, port=args.port, log_level="warning")
+    from studysprint.config import DAILY_LESSON_LIMIT
+    host = PUBLIC_HOST if args.public else HOST
+    daily_limit = DAILY_LESSON_LIMIT if args.public and not args.demo else None
+    print(f"Study Sprint on http://{host}:{args.port}  ({'demo mode' if args.demo else 'live agents'}"
+          f"{', password required' if args.password else ''}"
+          f"{f', {daily_limit} lessons a day' if daily_limit else ''})")
+    app = create_app(demo=args.demo, password=args.password or None, daily_limit=daily_limit)
+    uvicorn.run(app, host=host, port=args.port, log_level="warning")
     return 0
 
 
@@ -90,6 +129,8 @@ def main(argv=None):
     s = sub.add_parser("serve", help="run the web app")
     s.add_argument("--demo", action="store_true", help="serve bundled sample lessons (no API key needed)")
     s.add_argument("--port", type=int, default=8000)
+    s.add_argument("--public", action="store_true", help="listen on all interfaces (for hosting such as Render)")
+    s.add_argument("--password", help="require this password to use the site (HTTP Basic Auth)")
     s.set_defaults(fn=cmd_serve)
     b = sub.add_parser("build", help="build one lesson with the agents")
     b.add_argument("subject")
@@ -98,6 +139,8 @@ def main(argv=None):
     g = sub.add_parser("guide", help="build docs/how-it-works.pdf with screenshots")
     g.set_defaults(fn=cmd_guide)
     args = ap.parse_args(argv)
+    if args.fn is cmd_serve and (problem := check_serve_args(args)):
+        ap.error(problem)       # exits with status 2 before the server starts
     return args.fn(args)
 
 

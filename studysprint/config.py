@@ -1,4 +1,4 @@
-"""Central configuration: grades, reading-level bands, timer, exercises and agent settings.
+"""Central configuration: grades, reading-level bands, timer, exercises, agent settings and public-deployment limits.
 
 Keeping every tunable rule here means the agents' prompts, the validators, the web app
 and the evals all read the **same** numbers. A rule can't drift between the text an
@@ -147,3 +147,14 @@ class AgentConfig:
     token_budget: int = 400_000
     max_cost_usd: float = 1.00
     max_revisions: int = 2
+
+
+# --------------------------------------------------------------------------- public deployment
+
+#: Most AI lessons a public live server builds per UTC day. About $0.20 each, so this caps
+#: spend near $6 a day even if the password leaks.
+DAILY_LESSON_LIMIT = 30
+
+#: Shortest password accepted for a public live server. HTTP Basic Auth has no lockout,
+#: so the password's length is what resists guessing.
+MIN_PASSWORD_CHARS = 12

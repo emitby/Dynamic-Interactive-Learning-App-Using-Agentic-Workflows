@@ -24,10 +24,22 @@ Design decisions:
       and styles; images from this server or ``data:``), ``nosniff`` and no framing. With
       the sanitizer and ``<img>`` rendering of diagrams, agent-written content can't
       execute in the browser.
-    * The server binds to ``127.0.0.1`` only (see :mod:`studysprint.cli`), so it isn't
-      reachable from the network.
+    * By default the server binds to ``127.0.0.1`` only (see :mod:`studysprint.cli`), so
+      it isn't reachable from the network. ``serve --public`` (for Render) binds to all
+      interfaces and, for live agents, requires a password.
+    * **Password** (``create_app(password=...)``): HTTP Basic Auth on every route except
+      ``/api/config``, which the hosting health check calls and which holds nothing
+      secret. The browser shows its own login box once, then sends the credentials with
+      every API call, so the front end needs no login code. Any username is accepted;
+      only the password is compared, in constant time.
+    * **Daily cap** (``create_app(daily_limit=...)``): at most that many builds start per
+      UTC day (HTTP 429 beyond that), so a leaked password can't run up the bill.
+      Topic-gate declines cost nothing and don't count. The count lives in memory, so a
+      restart also resets it; the cap bounds daily spend, it isn't an exact quota.
 """
 
+import base64
+import binascii
 import secrets
 import threading
 import time
@@ -121,7 +133,37 @@ def pick_fixture(fixtures, subject):
     return fixtures[0]
 
 
-def create_app(demo=False, client_factory=None, demo_stage_seconds=0.6, runs_root=None):
+def utc_day():
+    """Today's date in UTC as ``YYYY-MM-DD``: the key the daily build cap counts against.
+
+    A module-level function (not inlined) so tests can move the clock to the next day.
+    """
+    return time.strftime("%Y-%m-%d", time.gmtime())
+
+
+def basic_auth_password(header):
+    """Extract the password from an HTTP ``Authorization: Basic ...`` header.
+
+    Args:
+        header: The header value, or ``None`` when the request has none.
+
+    Returns:
+        The password as bytes, or ``None`` if the header is missing or malformed. The
+        username before the first ``:`` is ignored: the site has one shared password.
+    """
+    scheme, _, encoded = (header or "").partition(" ")
+    if scheme.lower() != "basic":
+        return None
+    try:
+        decoded = base64.b64decode(encoded, validate=True)
+    except (binascii.Error, ValueError):
+        return None
+    _, sep, password = decoded.partition(b":")
+    return password if sep else None
+
+
+def create_app(demo=False, client_factory=None, demo_stage_seconds=0.6, runs_root=None,
+               password=None, daily_limit=None):
     """Build the FastAPI application.
 
     Args:
@@ -130,16 +172,33 @@ def create_app(demo=False, client_factory=None, demo_stage_seconds=0.6, runs_roo
             (tests inject a scripted fake). Defaults to the real client.
         demo_stage_seconds: Pause per progress stage in demo mode (tests pass 0).
         runs_root: Optional parent folder for lesson run directories (tests use a scratch folder).
+        password: If set, every route except ``/api/config`` requires this password
+            (HTTP Basic Auth). See the module docstring.
+        daily_limit: If set, the most builds that may start per UTC day.
 
     Returns:
-        The configured ``FastAPI`` app. Its state (jobs, sessions) lives in this closure,
-        so separate apps (for example in parallel tests) never share state.
+        The configured ``FastAPI`` app. Its state (jobs, sessions, the daily count) lives
+        in this closure, so separate apps (for example in parallel tests) never share state.
     """
     app = FastAPI(title="Study Sprint", docs_url=None, redoc_url=None, openapi_url=None)
     sessions = SessionStore()
     jobs = {}
     jobs_lock = threading.Lock()
+    builds_today = {"day": None, "count": 0}      # guarded by jobs_lock
     fixtures = load_fixtures() if demo else []
+    expected = password.encode("utf-8") if password else None
+
+    # Registered before security_headers, so it runs inside it: a 401 still gets the headers.
+    @app.middleware("http")
+    async def require_password(request: Request, call_next):
+        """Answer 401 unless the request carries the password. See the module docstring."""
+        if expected is None or request.url.path == "/api/config":
+            return await call_next(request)
+        given = basic_auth_password(request.headers.get("authorization"))
+        if given is not None and secrets.compare_digest(given, expected):
+            return await call_next(request)
+        return JSONResponse({"error": "Please enter the Study Sprint password."}, status_code=401,
+                            headers={"WWW-Authenticate": 'Basic realm="Study Sprint", charset="UTF-8"'})
 
     @app.middleware("http")
     async def security_headers(request: Request, call_next):
@@ -200,7 +259,8 @@ def create_app(demo=False, client_factory=None, demo_stage_seconds=0.6, runs_roo
 
         Raises:
             HTTPException 400: The subject or grade is invalid (message is user-facing).
-            HTTPException 429: Too many builds are already running.
+            HTTPException 429: Too many builds are already running, or today's builds
+                (``daily_limit``) are used up.
         """
         if req.grade not in GRADE_LABELS:
             raise HTTPException(400, "Please choose a grade.")
@@ -218,6 +278,13 @@ def create_app(demo=False, client_factory=None, demo_stage_seconds=0.6, runs_roo
         with jobs_lock:
             if sum(j.status == "building" for j in jobs.values()) >= MAX_ACTIVE_BUILDS:
                 raise HTTPException(429, "Lots of lessons are being built right now. Please try again in a minute.")
+            if daily_limit is not None:
+                today = utc_day()
+                if builds_today["day"] != today:
+                    builds_today.update(day=today, count=0)
+                if builds_today["count"] >= daily_limit:
+                    raise HTTPException(429, "Today's lessons are all used up. Please come back tomorrow!")
+                builds_today["count"] += 1
             jobs[job.id] = job
         if demo:
             target, args = _run_demo, (job, subject)

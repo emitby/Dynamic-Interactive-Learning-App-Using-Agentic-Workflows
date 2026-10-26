@@ -77,6 +77,28 @@ def test_server_binds_to_loopback_only():
     assert HOST == "127.0.0.1"
 
 
+@pytest.mark.parametrize("argv", [["serve", "--public"],
+                                  ["serve", "--public", "--password", ""],
+                                  ["serve", "--public", "--password", "short"]])
+def test_public_live_server_refused_without_strong_password(argv, capsys):
+    """A public server with live agents must not start open: anyone could spend API credits."""
+    from studysprint.cli import main
+    with pytest.raises(SystemExit) as exc:
+        main(argv)
+    assert exc.value.code == 2 and "STUDYSPRINT_PASSWORD" in capsys.readouterr().err
+
+
+@pytest.mark.parametrize("public, demo, password", [(True, True, None),
+                                                    (True, False, "correct-horse-battery"),
+                                                    (False, False, None)])
+def test_safe_serve_arguments_accepted(public, demo, password):
+    """Public demo, public live with a strong password, and plain local serving are all allowed."""
+    from argparse import Namespace
+
+    from studysprint.cli import check_serve_args
+    assert check_serve_args(Namespace(public=public, demo=demo, password=password)) is None
+
+
 def test_every_module_class_and_function_has_a_docstring():
     """CLAUDE.md: docstrings on every module, class and function (nested tool handlers included)."""
     import ast

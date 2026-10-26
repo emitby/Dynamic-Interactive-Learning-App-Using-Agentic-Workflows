@@ -1,26 +1,45 @@
-# Render Blueprint: Study Sprint as a public live demo.
-# Deploy: Render dashboard > New > Blueprint > pick this repository.
+# Render Blueprint: Study Sprint as two free web services.
+# Deploy: Render dashboard > Blueprints > this repository > Sync (first time: New > Blueprint).
 #
-# Runs in demo mode (bundled sample lessons, no API key), so a public URL
-# can't spend Anthropic credits. The CLI binds to 127.0.0.1 for local safety;
-# Render must reach the app on 0.0.0.0:$PORT, so the start command calls
-# uvicorn directly instead of `python -m studysprint serve`.
+#   study-sprint       public demo: bundled sample lessons, no API key, no cost
+#   study-sprint-live  live AI lessons behind a password, at most 30 lessons a day
+#
+# `serve --public` listens on 0.0.0.0:$PORT so Render can route traffic in (locally the
+# app stays on 127.0.0.1). For live agents it refuses to start without a password of
+# 12+ characters, so a missing secret fails the deploy instead of opening the site.
+# Both services use the editable install from the README: studysprint.paths resolves
+# the static files and fixtures relative to the repository checkout.
 services:
   - type: web
     name: study-sprint
     runtime: python
     plan: free
-    # Editable install, as in the README: studysprint.paths resolves the
-    # static files and fixtures relative to the repository checkout.
     buildCommand: pip install --no-cache-dir -r requirements.txt -e .
-    startCommand: >-
-      python -c "import sys, uvicorn;
-      from studysprint.api import create_app;
-      uvicorn.run(create_app(demo=True), host='0.0.0.0', port=int(sys.argv[1]), log_level='warning')"
-      $PORT
+    startCommand: python -m studysprint serve --demo --public --port $PORT
     healthCheckPath: /api/config
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.7          # newest version the CI matrix tests
       - key: PYTHONPYCACHEPREFIX
         value: .cache/pycache  # keep bytecode inside the project, like the launchers
+
+  - type: web
+    name: study-sprint-live
+    runtime: python
+    plan: free
+    buildCommand: pip install --no-cache-dir -r requirements.txt -e .
+    # The shell passes the password in, so the Python code never reads the environment
+    # (CLAUDE.md). The Anthropic SDK reads ANTHROPIC_API_KEY itself.
+    startCommand: python -m studysprint serve --public --port $PORT --password "$STUDYSPRINT_PASSWORD"
+    healthCheckPath: /api/config   # the one route open without the password
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: PYTHONPYCACHEPREFIX
+        value: .cache/pycache
+      # sync: false -> Render asks for these values when the Blueprint is synced;
+      # they are stored in Render, never in git.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: STUDYSPRINT_PASSWORD
+        sync: false

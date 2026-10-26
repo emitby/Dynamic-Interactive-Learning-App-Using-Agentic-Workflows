@@ -49,3 +49,14 @@ User decisions:
 - **Verified:** the build command installs cleanly in a fresh venv; the parsed `startCommand` serves `/`, `/static/app.js` and `/api/config` (`"demo": true`); a full session over HTTP (lesson → break → finish reading → submit) returned 200 at every step.
 - **Design:** demo mode only, so a public URL can't spend API credits. The CLI still binds to `127.0.0.1` for local use; only the Render start command binds to `0.0.0.0`.
 - **Not verified:** a real deploy on Render (needs the user's Render account).
+
+## Task 3: Password-protected live AI service on Render (2026-10-26)
+
+Decisions (user): keep the public demo and add a live service; the shell passes the password in (no environment reads in Python); cap AI lessons at 30 per UTC day.
+
+- [ ] 1. `cli.py`: `serve --public` (bind 0.0.0.0) and `--password`; refuse a public live server without a 12+ character password; public live mode applies `DAILY_LESSON_LIMIT` (config.py)
+- [ ] 2. `api.py`: `create_app(password=, daily_limit=)`; HTTP Basic Auth middleware (`secrets.compare_digest`, `/api/config` open for the health check); per-UTC-day build cap → 429
+- [ ] 3. `render.yaml`: `study-sprint` (demo) and `study-sprint-live` (password, `ANTHROPIC_API_KEY` and `STUDYSPRINT_PASSWORD` with `sync: false`), both via `python -m studysprint serve`
+- [ ] 4. Tests: auth 401/200, open health check, daily cap and day rollover; CLI refusal without or with a short password
+- [ ] 5. Docs: api/cli docstrings, README deploy section + safety bullet + test badge, guardrails.md H9, run.ps1 comment
+- [ ] 6. Verify: full test suite; clean-clone dry run of both start commands (stop servers by PID); commit and push

@@ -1,5 +1,6 @@
 # Study Sprint launcher (Windows PowerShell).
 #   .\run.ps1 serve [--demo] [--port 8000]   run the web app on http://127.0.0.1:8000
+#   (Hosting such as Render uses serve --public; see render.yaml.)
 #   .\run.ps1 build "volcanoes" --grade 4    build one lesson with the agents
 #   .\run.ps1 test [pytest args]             unit, API and browser tests (offline, free)
 #   .\run.ps1 eval [--run runs\<id>]         score a saved lesson + red-team (free)
