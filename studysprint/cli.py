@@ -68,7 +68,7 @@ def cmd_serve(args):
     daily_limit = DAILY_LESSON_LIMIT if args.public and not args.demo else None
     print(f"Study Sprint on http://{host}:{args.port}  ({'demo mode' if args.demo else 'live agents'}"
           f"{', password required' if args.password else ''}"
-          f"{f', {daily_limit} lessons a day' if daily_limit else ''})")
+          f"{f', {daily_limit} lessons a day' if daily_limit else ''})", flush=True)  # hosts pipe stdout
     app = create_app(demo=args.demo, password=args.password or None, daily_limit=daily_limit)
     uvicorn.run(app, host=host, port=args.port, log_level="warning")
     return 0

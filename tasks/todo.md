@@ -54,9 +54,22 @@ User decisions:
 
 Decisions (user): keep the public demo and add a live service; the shell passes the password in (no environment reads in Python); cap AI lessons at 30 per UTC day.
 
-- [ ] 1. `cli.py`: `serve --public` (bind 0.0.0.0) and `--password`; refuse a public live server without a 12+ character password; public live mode applies `DAILY_LESSON_LIMIT` (config.py)
-- [ ] 2. `api.py`: `create_app(password=, daily_limit=)`; HTTP Basic Auth middleware (`secrets.compare_digest`, `/api/config` open for the health check); per-UTC-day build cap → 429
-- [ ] 3. `render.yaml`: `study-sprint` (demo) and `study-sprint-live` (password, `ANTHROPIC_API_KEY` and `STUDYSPRINT_PASSWORD` with `sync: false`), both via `python -m studysprint serve`
-- [ ] 4. Tests: auth 401/200, open health check, daily cap and day rollover; CLI refusal without or with a short password
-- [ ] 5. Docs: api/cli docstrings, README deploy section + safety bullet + test badge, guardrails.md H9, run.ps1 comment
-- [ ] 6. Verify: full test suite; clean-clone dry run of both start commands (stop servers by PID); commit and push
+- [x] 1. `cli.py`: `serve --public` (bind 0.0.0.0) and `--password`; refuse a public live server without a 12+ character password; public live mode applies `DAILY_LESSON_LIMIT` (config.py)
+- [x] 2. `api.py`: `create_app(password=, daily_limit=)`; HTTP Basic Auth middleware (`secrets.compare_digest`, `/api/config` open for the health check); per-UTC-day build cap → 429
+- [x] 3. `render.yaml`: `study-sprint` (demo) and `study-sprint-live` (password, `ANTHROPIC_API_KEY` and `STUDYSPRINT_PASSWORD` with `sync: false`), both via `python -m studysprint serve`
+- [x] 4. Tests: auth 401/200, open health check, daily cap and day rollover; CLI refusal without or with a short password
+- [x] 5. Docs: api/cli docstrings, README deploy section + safety bullet + test badge, guardrails.md H9, run.ps1 comment
+- [x] 6. Verify: full test suite; clean-clone dry run of both start commands (stop servers by PID); commit and push
+
+## Review (Task 3)
+
+- **Built:** `serve --public` and `--password` (cli.py), HTTP Basic Auth and a daily build cap (api.py), and two services in render.yaml.
+- **Verified:**
+  - 197 tests pass (12 new), including the browser end-to-end tests.
+  - Dry run from a clean clone: both `startCommand`s parsed from the YAML and run through bash.
+    - Demo: a full session over HTTP.
+    - Live: `/api/config` 200 without a password; `/` 401 with `WWW-Authenticate` without a password or with the wrong one; 200 with the right one.
+    - A missing or short `STUDYSPRINT_PASSWORD` exits 2 before serving, so the deploy fails.
+- **Found:** the startup line was invisible in piped logs (buffered stdout) → `flush=True`.
+- **Known, not changed:** with no API key, a live build fails at the first model call with the friendly message (the SDK resolves the key lazily), so the 503 "no API key" branch in `start_lesson` never fires.
+- **Not verified:** a real AI build on Render (needs the user's key there). The generated `docs/how-it-works.pdf` still says 185 tests until `run.ps1 guide` is rerun.
