@@ -20,3 +20,8 @@ Learned building Study Sprint (2026-10-21):
 - **Guardrail regexes need a precision rule, not just a word list.** Praise counts only when followed by punctuation, so "Right angles…" passes. Blocked crime terms need the instruction form, so "stealth" passes.
 - **Guardrail tests must be portable, or explicitly platform-gated.** CI on Linux failed because `..\evil.txt`, `C:\Windows\win.ini` and the `\?\` prefix are Windows-only spellings (on Linux they're ordinary names inside the project, so allowing them is correct). Build "outside" paths from `PROJECT_DIR.anchor`, and `skipif` Windows-only cases.
 - **Mark binaries in `.gitattributes` before the first commit.** Git classified the PDF as text (line-ending conversion would corrupt it), and `run.sh` needs LF. Put `* text=auto` first: later lines override earlier ones.
+
+Learned deploying to Render (2026-10-25):
+
+- **Stop test servers by PID, never by image name or a wildcard filter.** A `taskkill /IM python.exe` cleanup could have killed the user's own running server. Look up the PID listening on the test port first, then stop that PID and its child.
+- **Drive a multi-step flow in the order the app enforces.** A 409 from `finish-reading` was the test skipping "break done", not a bug. Read the route's rules before treating an error as a failure.

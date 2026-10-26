@@ -37,3 +37,15 @@ User decisions:
     - kid-unfriendly × and ✗ wording
     - small lesson accuracy fixes
 - **Not pushed to GitHub** (not requested).
+
+## Task 2: Render deployment (2026-10-25)
+
+- [x] 1. `render.yaml` Blueprint: free Python web service, demo mode, `0.0.0.0:$PORT`, Python 3.12.7, health check `/api/config`
+- [x] 2. Dry run from a clean clone in `.cache/render-dryrun`: build command, YAML parsed, `startCommand` run through bash with `PORT=10000`
+- [x] 3. Push to `main`
+
+## Review (Task 2)
+
+- **Verified:** the build command installs cleanly in a fresh venv; the parsed `startCommand` serves `/`, `/static/app.js` and `/api/config` (`"demo": true`); a full session over HTTP (lesson → break → finish reading → submit) returned 200 at every step.
+- **Design:** demo mode only, so a public URL can't spend API credits. The CLI still binds to `127.0.0.1` for local use; only the Render start command binds to `0.0.0.0`.
+- **Not verified:** a real deploy on Render (needs the user's Render account).
