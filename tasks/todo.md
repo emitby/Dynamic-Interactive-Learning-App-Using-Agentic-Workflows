@@ -73,3 +73,13 @@ Decisions (user): keep the public demo and add a live service; the shell passes 
 - **Found:** the startup line was invisible in piped logs (buffered stdout) → `flush=True`.
 - **Known, not changed:** with no API key, a live build fails at the first model call with the friendly message (the SDK resolves the key lazily), so the 503 "no API key" branch in `start_lesson` never fires.
 - **Not verified:** a real AI build on Render (needs the user's key there). The generated `docs/how-it-works.pdf` still says 185 tests until `run.ps1 guide` is rerun.
+
+## Task 4: "About this project" box on the start screen (2026-10-26)
+
+- [x] 1. `index.html`: an `<aside id="about">` at the top of the start screen (hidden once a lesson starts); `style.css`: `.about`
+- [x] 2. Verify: 197 tests pass; screenshots at 1280 px and 390 px, no horizontal scroll; the box hides on the reading screen
+
+## Review (Task 4)
+
+- **Left out:** "hooks". The project uses no Claude Code hooks, so the box doesn't claim them.
+- **Not updated:** the screenshots in `docs/` and `docs/how-it-works.pdf` show the old start screen until `run.ps1 guide` is rerun.

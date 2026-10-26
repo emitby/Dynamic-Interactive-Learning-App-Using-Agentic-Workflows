@@ -20,6 +20,29 @@
   <main id="app">
     <!-- 1. Start: subject and grade -->
     <section id="screen-start" class="screen card">
+      <!-- For visitors seeing the project, not for learners: what the app demonstrates. -->
+      <aside id="about" class="about" aria-labelledby="about-title">
+        <p class="eyebrow" id="about-title">About this project</p>
+        <p>Although Study Sprint is a simple web app, it showcases a complete agentic workflow.
+          Pick any subject and grade, and five Claude agents build a fact-checked lesson (three
+          concepts, a diagram and a 5-question quiz) while a 1-minute timer triggers movement breaks.</p>
+        <ul>
+          <li><strong>Multi-agent coordination:</strong> Intake, Curriculum, Diagram, Quiz and Reviewer
+            agents hand work to each other, with the diagram and quiz written in parallel.</li>
+          <li><strong>A harness:</strong> code runs the agents, checks every hand-off, sends rejected
+            work back for revision, and caps tokens and cost.</li>
+          <li><strong>Fact-checking:</strong> an independent Reviewer agent checks each lesson and can
+            send it back up to twice.</li>
+          <li><strong>Guardrails:</strong> a topic gate before any agent runs, reading levels measured by
+            code, a sanitizer for agent-drawn diagrams, and grading on the server.</li>
+          <li><strong>Evals:</strong> nearly 200 automated tests, a 45-case red-team and a live test
+            matrix from Kindergarten to College.</li>
+          <li><strong>Claude Code, GitHub and Render working together:</strong> built with Claude Code,
+            tested by GitHub Actions on every push, and deployed to Render from a Blueprint.</li>
+        </ul>
+        <p><a href="https://github.com/emitby/Dynamic-Interactive-Learning-App-Using-Agentic-Workflows"
+              target="_blank" rel="noopener noreferrer">See the source code on GitHub</a></p>
+      </aside>
       <h1>What would you like to study today?</h1>
       <p class="lead">Pick a subject and your grade. You'll get three key ideas, a picture and a quick quiz,
         plus a movement break whenever the 1-minute timer runs out!</p>
